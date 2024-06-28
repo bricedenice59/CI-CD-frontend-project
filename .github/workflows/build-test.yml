@@ -29,6 +29,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-nodejs }}
+          cache: 'npm'
 
       - name: Install dependencies from packages.json
         run: npm ci
@@ -39,11 +40,5 @@ jobs:
       - name: Create artifact for code coverage report
         uses: actions/upload-artifact@v4
         with:
-          name: Code coverage report
-          path: ./target/site/jacoco/
-
-      - name: Create artifact for code coverage report
-        uses: actions/upload-artifact@v4
-        with:
             name: Code coverage report
-            path: .coverage
+            path: coverage
