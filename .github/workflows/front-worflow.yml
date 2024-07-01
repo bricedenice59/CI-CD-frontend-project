@@ -10,11 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3 # Necessary to access local action
-      - id: testLocalAction
-        uses: ./
 
       - name: Build, test and scan project with sonarqube
-        uses: ./.github/workflows/build-test-quality-scan.yml
+        uses: ./.github/actions/build-test-scan/action.yml
 
       - name: Build and push image to docker hub
-        uses: ./.github/workflows/docker-image.yml
+        uses: ./.github/actions/docker/action.yml
