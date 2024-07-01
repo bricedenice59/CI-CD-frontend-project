@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Joke } from '../model/joke.model';
 
 @Injectable({
@@ -20,7 +20,7 @@ export class JokesService {
     this.httpClient.get<Joke>(this.pathService).subscribe((joke: Joke) => this.subject.next(joke));
   }
 
-  public joke$(): Observable<Joke | null > {
+  public joke$() {
     return this.subject.asObservable();
   }
 }
