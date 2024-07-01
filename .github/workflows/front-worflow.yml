@@ -1,0 +1,28 @@
+name: Frontend CI-CD workflow
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, reopened]
+
+jobs:
+  set_owner_and_repo:
+    runs-on: ubuntu-latest
+    outputs:
+      owner: ${{ steps.set_vars.outputs.owner }}
+      repo: ${{ steps.set_vars.outputs.repo }}
+    steps:
+      - name: Get owner and repo name
+        id: set_vars
+        run: |
+          IFS='/' read -r owner repo <<< "${{ github.repository }}"
+          echo "::set-output name=owner::$owner"
+          echo "::set-output name=repo::$repo"
+
+  build-test-sonarqube:
+    needs: [set_owner_and_repo]
+    uses:  ${{ needs.set_owner_and_repo.outputs.owner }}/${{ needs.set_owner_and_repo.outputs.repo }}/.github/workflows/build-test-quality-scan.yml@main
+
+  build-push-docker:
+    needs: [set_owner_and_repo, build-test-sonarqube]
+    uses: ${{ needs.set_owner_and_repo.outputs.owner }}/${{ needs.set_owner_and_repo.outputs.repo }}/.github/workflows/docker-image.yml@main
