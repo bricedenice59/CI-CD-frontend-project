@@ -6,12 +6,12 @@ on:
     types: [opened, reopened]
 
 jobs:
-  set_owner_and_repo:
+  workflow:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3 # Necessary to access local action
+      - name: Build, test and scan project with sonarqube
+        uses: ./.github/workflows/build-test-quality-scan.yml@main
 
-  build-test-sonarqube:
-    uses: ./.github/workflows/build-test-quality-scan.yml@main
-
-  build-push-docker:
-    needs: [build-test-sonarqube]
-    uses: ./.github/workflows/docker-image.yml@main
+      - name: Build and push image to docker hub
+        uses: ./.github/workflows/docker-image.yml@main
